@@ -9,11 +9,45 @@
 <body>
 
 <script>
-	$('#field1').easyupload({});
+	$('#field1').easyupload({
+		url: 'upload.php',
+		on_progress: function(progress){
+			$('#status').animate({width: progress + '%'}, 100);
+		},
+		on_upload_error: function (p)
+		{
+			if(p.status == 413)
+			{
+				$('#status_text').html('The server reported an error. The uploaded file size exceeds the setting on the server.');
+			}
+			$('#progress').fadeOut(500);
+		},
+		on_before_upload: function(info)
+		{
+			$('#status_text').html('');
+			$('#progress').fadeIn(100);
+			$('#status').css({width: 0});
+		},
+		on_upload_finish: function(data)
+		{
+			$('#progress').fadeOut(500);
+			$('#status_text').html('Files successfully uploaded to the server');
+		},
+		data:
+		{
+			id: 6,
+			extra_param: 'all'
+		}
+	});
 </script>
 
 <input type="file" id="field1" multiple />
 
+<div id="progress" style="width: 400px; background-color: #EEEEEE; display: none;">
+	<div id="status" style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
+</div>
+
+<div id="status_text"></div>
 
 </body>
 </html>
