@@ -3,7 +3,11 @@
 <head>
 	<meta charset="UTF-8" />
 	<title>jQuery Easy Upload Plugin Examples</title>
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
 	<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+
+	<link rel="stylesheet" href="../src/jquery.easyupload.css">
 	<script src="../src/jquery.easyupload.js"></script>
 </head>
 <body>
@@ -11,27 +15,30 @@
 <script>
 	$('#field1').easyupload({
 		url: 'upload.php',
+		on_upload_before: function(info)
+		{
+			$('#status_1_text').html('');
+			$('#progress_1').fadeIn(150);
+			$('#status_1,#status_1_total').css({width: 0});
+		},
 		on_progress: function(progress){
-			$('#status').animate({width: progress + '%'}, 100);
+			$('#status_1').stop().animate({width: progress.progress_file + '%'}, 50);
+			$('#status_1_total').stop ().animate({width: progress.progress_total + '%'}, 150);
+			$('#status_1_text').html('Sending files <b>' + progress.current_file + '</b> / <b>' + progress.total_files + '</b> ');
+		},
+		on_upload_file: function(data)
+		{
+			$('#status_1').css({width: 0});
+			$('#status_1_text_total').append('<li>File <b>' + data.data.name + '</b> successfully uploaded to the server.</li>')
 		},
 		on_upload_error: function (p)
 		{
-			if(p.status == 413)
-			{
-				$('#status_text').html('The server reported an error. The uploaded file size exceeds the setting on the server.');
-			}
-			$('#progress').fadeOut(500);
+			$('#status_1_text_total').append('<li class="text-danger">File error: <b>' + p.file_name + '</b>. The server reported an error. The uploaded file size exceeds the setting on the server.</li>');
 		},
-		on_before_upload: function(info)
+		on_upload_finish: function()
 		{
-			$('#status_text').html('');
-			$('#progress').fadeIn(100);
-			$('#status').css({width: 0});
-		},
-		on_upload_finish: function(data)
-		{
-			$('#progress').fadeOut(500);
-			$('#status_text').html('Files successfully uploaded to the server');
+			$('#progress_1').fadeOut(500);
+			$('#status_1_text_total').append('<li class="text-primary">All files successfully uploaded to the server.</li>');
 		},
 		data:
 		{
@@ -41,13 +48,39 @@
 	});
 </script>
 
-<input type="file" id="field1" multiple />
+<br />
+<br />
 
-<div id="progress" style="width: 400px; background-color: #EEEEEE; display: none;">
-	<div id="status" style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<span class="btn btn-primary btn-file">Upload files<input type="file" id="field1" multiple /></span>
+		</div>
+		<div class="col-sm-5">
+			<div id="progress_1" style="display: none;">
+				<div style="width: 400px; background-color: #EEEEEE;">
+					<div id="status_1_total" style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
+				</div>
+				<br>
+				<div style="width: 400px; background-color: #EEEEEE;">
+					<div id="status_1" style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
+				</div>
+				<div id="status_1_text"></div>
+			</div>
+		</div>
+		<div class="col-sm-5">
+			<ul id="status_1_text_total"></ul>
+		</div>
+	</div>
+
 </div>
+<hr>
 
-<div id="status_text"></div>
+<br>
+<br>
+
+
+
 
 </body>
 </html>

@@ -1,14 +1,8 @@
 <?php
-$json = [];
+$json = array();
 $json['result'] = 'All files are uploaded!';
 $json['action'] = 'some_action';
-
-$json['data'] = [];
-foreach($_FILES as $item)
-{
-	$json['data'][] = array('name' => $item['name'], 'size' => $item['size']);
-}
-
+$json['data'] = array('name' => $_FILES['file']['name'], 'size' => $_FILES['file']['size']);
 $json['return_data_to_client'] = $_POST;
 
 echo json_encode ($json);
