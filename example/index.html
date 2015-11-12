@@ -13,39 +13,70 @@
 <body>
 
 <script>
-	$('#field1').easyupload({
+$(document).ready(function ()
+{
+	$ ('#field1').easyupload ({
 		url: 'upload.php',
-		on_upload_before: function(info)
+		on_upload_before: function (info)
 		{
-			$('#status_1_text').html('');
-			$('#progress_1').fadeIn(150);
-			$('#status_1,#status_1_total').css({width: 0});
+			$ ('#status_1_text').html ('');
+			$ ('#progress_1').fadeIn (150);
+			$ ('#status_1,#status_1_total').css ({width: 0});
 		},
-		on_progress: function(progress){
-			$('#status_1').stop().animate({width: progress.progress_file + '%'}, 50);
-			$('#status_1_total').stop ().animate({width: progress.progress_total + '%'}, 150);
-			$('#status_1_text').html('Sending files <b>' + progress.current_file + '</b> / <b>' + progress.total_files + '</b> ');
-		},
-		on_upload_file: function(data)
+		on_progress: function (progress)
 		{
-			$('#status_1').css({width: 0});
-			$('#status_1_text_total').append('<li>File <b>' + data.data.name + '</b> successfully uploaded to the server.</li>')
+			$ ('#status_1').css ({width: progress.progress_file + '%'});
+			$ ('#status_1_total').css ({width: progress.progress_total + '%'});
+			$ ('#status_1_text').html ('Sending files <b>' + progress.current_file + '</b> / <b>' + progress.total_files + '</b> ');
+		},
+		on_upload_file: function (data)
+		{
+			$ ('#status_1').css ({width: 0});
+			$ ('#status_1_text_total').append ('<li>File <b>' + data.data.name + '</b> successfully uploaded to the server.</li>')
 		},
 		on_upload_error: function (p)
 		{
-			$('#status_1_text_total').append('<li class="text-danger">File error: <b>' + p.file_name + '</b>. The server reported an error. The uploaded file size exceeds the setting on the server.</li>');
+			$ ('#status_1_text_total').append ('<li class="text-danger">File error: <b>' + p.file_name + '</b>. The server reported an error. The uploaded file size exceeds the setting on the server.</li>');
 		},
-		on_upload_finish: function()
+		on_upload_finish: function ()
 		{
-			$('#progress_1').fadeOut(500);
-			$('#status_1_text_total').append('<li class="text-primary">All files successfully uploaded to the server.</li>');
+			$ ('#progress_1').fadeOut (500);
+			$ ('#status_1_text_total').append ('<li class="text-primary">All files successfully uploaded to the server.</li>');
 		},
-		data:
-		{
-			id: 6,
-			extra_param: 'all'
+		data: {
+			id: 6, extra_param: 'all'
 		}
 	});
+
+	$ ('#field2').easyupload ({
+		url: 'upload.php?id=5',
+		on_upload_before: function (info)
+		{
+			$ ('#progress_2').fadeIn (150);
+			$ ('#status_2_total').css ({width: 0});
+		},
+		on_progress: function (progress)
+		{
+			$ ('#status_2_total').css ({width: progress.progress_total + '%'}).html (parseInt (progress.progress_total) + '%');
+			$ ('#status_2_text').html ('Sending files <b>' + progress.current_file + '</b> / <b>' + progress.total_files + '</b> ');
+		},
+		on_upload_finish: function ()
+		{
+			$('#progress_2').fadeOut(500, function()
+			{
+				$('#status_2_total').css({width: 0});
+			});
+		}
+	});
+
+	$('#field3').easyupload({
+		url: 'upload.php',
+		on_upload_finish: function()
+		{
+			$('#status_3_text_total').html('The files were downloaded');
+		}
+	});
+});
 </script>
 
 <br />
@@ -54,7 +85,7 @@
 <div class="container">
 	<div class="row">
 		<div class="col-sm-2">
-			<span class="btn btn-primary btn-file">Upload files<input type="file" id="field1" multiple /></span>
+			<input type="file" id="field1" multiple />
 		</div>
 		<div class="col-sm-5">
 			<div id="progress_1" style="display: none;">
@@ -72,7 +103,40 @@
 			<ul id="status_1_text_total"></ul>
 		</div>
 	</div>
+</div>
+<hr>
 
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<span class="btn btn-primary btn-file">Upload files<input type="file" id="field2" multiple /></span>
+		</div>
+		<div class="col-sm-5">
+			<div id="progress_2" style="display: none;">
+				<div class="progress">
+					<div class="progress-bar" id="status_2_total"></div>
+				</div>
+				<div id="status_2_text"></div>
+			</div>
+		</div>
+		<div class="col-sm-5">
+			<ul id="status_2_text_total"></ul>
+		</div>
+	</div>
+</div>
+<hr>
+
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-2">
+			<input type="file" id="field3" multiple />
+		</div>
+		<div class="col-sm-5"></div>
+		<div class="col-sm-5">
+			<ul id="status_3_text_total"></ul>
+		</div>
+	</div>
 </div>
 <hr>
 

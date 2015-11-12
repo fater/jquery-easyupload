@@ -1,6 +1,6 @@
 /*
  * Module: jQuery Easy Upload Plugin
- * Version: 1.3.0
+ * Version: 2.0.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
  * Updated: 12 Nov 2015
@@ -8,9 +8,10 @@
  * Dependence: jQuery
  * */
 
+
 (function ($)
 {
-	var settings =
+	var defaults =
 	{
 		url: document.URL,
 		data: {},
@@ -22,97 +23,103 @@
 		on_upload_finish: function(){},
 		on_upload_error: function(data){}
 	};
-	var process = {files: {}, all_files_size: 0, uploaded_size: 0, size: 0, send_pos: 0, sender_launched: false};
 
-	var methods =
+	var process_defaults = {files: {}, all_files_size: 0, uploaded_size: 0, size: 0, send_pos: 0, sender_launched: false};
+
+	var plugin = function (element, options)
 	{
-		queue: function (data)
+		var object = this;
+		object.element = $(element);
+		object.options = $.extend({}, defaults, options);
+		object.process = $.extend({}, process_defaults);
+		object.element.on('change', function(e)
 		{
-			$.each(data, function(k, v)
-			{
-				process.size++;
-				process.files[process.size] = v;
-				process.all_files_size += v.size;
-			});
+			object.queue(e.target.files);
+		});
+	};
 
-			if (process.sender_launched == false)
-			{
-				settings.on_upload_before.call(this, {files: process.size, files_size: process.all_files_size});
-				process.sender_launched = true;
-				methods.send ();
-			}
-		},
-
-		// Send method
-		send: function ()
+	plugin.prototype.queue = function(files)
+	{
+		var object = this;
+		$.each(files, function(k, v)
 		{
-			if (process.send_pos >= process.size)
-			{
-				process = {files: {}, all_files_size: 0, uploaded_size: 0, size: 0, send_pos: 0, sender_launched: false};
-				settings.on_upload_finish();
-				return null;
-			}
+			object.process.size++;
+			object.process.files[object.process.size] = v;
+			object.process.all_files_size += v.size;
+		});
 
-			process.send_pos++;
-			var form_data = new FormData();
-			// Append one file to submit
-			form_data.append(settings.file_name, process.files[process.send_pos]);
-			// Append extra data to submit
-			$.each(settings.data, function (k, v)
-			{
-				form_data.append(k, v);
-			});
-
-			$.ajax({
-				url: settings.url,
-				type: 'POST',
-				data: form_data,
-				cache: false,
-				dataType: 'json',
-				processData: false,
-				contentType: false,
-				complete: function(data)
-				{
-					process.uploaded_size += process.files[process.send_pos].size;
-					methods.send();
-				},
-				success: function(data)
-				{
-					settings.on_upload_file (data);
-				},
-				error: function(data)
-				{
-					var file_name = process.files[process.send_pos].name;
-					settings.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
-				},
-				xhr: function()
-				{
-					var xhr = $.ajaxSettings.xhr();
-					xhr.upload.onprogress = function(evt)
-					{
-						var data = {};
-						data.progress_file = evt.loaded / evt.total * 100;
-						data.progress_total = (process.uploaded_size + evt.loaded) / process.all_files_size * 100;
-						data.total_files = process.size;
-						data.current_file = process.send_pos;
-						settings.on_progress.call(this, data);
-					};
-					xhr.upload.onload = function(){};
-					return xhr;
-				}
-			});
+		if (object.process.sender_launched == false)
+		{
+			object.options.on_upload_before({files: object.process.size, files_size: object.process.all_files_size});
+			object.process.sender_launched = true;
+			object.send();
 		}
+	};
+
+	plugin.prototype.send = function ()
+	{
+		var object = this;
+		if (object.process.send_pos >= object.process.size)
+		{
+			object.process = $.extend({}, process_defaults);
+			object.options.on_upload_finish();
+			return null;
+		}
+		object.process.send_pos++;
+		var form_data = new FormData();
+		// Append one file to submit
+		form_data.append(object.options.file_name, object.process.files[object.process.send_pos]);
+		// Append extra data to submit
+		$.each(object.options.data, function (k, v)
+		{
+			form_data.append(k, v);
+		});
+
+		$.ajax({
+			url: object.options.url,
+			type: 'POST',
+			data: form_data,
+			cache: false,
+			dataType: 'json',
+			processData: false,
+			contentType: false,
+			complete: function(data)
+			{
+				object.process.uploaded_size += object.process.files[object.process.send_pos].size;
+				object.send();
+			},
+			success: function(data)
+			{
+				object.options.on_upload_file (data);
+			},
+			error: function(data)
+			{
+				var file_name = object.process.files[object.process.send_pos].name;
+				object.options.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
+			},
+			xhr: function()
+			{
+				var xhr = $.ajaxSettings.xhr();
+				xhr.upload.onprogress = function(evt)
+				{
+					var data = {};
+					data.progress_file = evt.loaded / evt.total * 100;
+					data.progress_total = (object.process.uploaded_size + evt.loaded) / object.process.all_files_size * 100;
+					data.total_files = object.process.size;
+					data.current_file = object.process.send_pos;
+					object.options.on_progress(data);
+				};
+				xhr.upload.onload = function(){};
+				return xhr;
+			}
+		});
 	};
 
 	$.fn.easyupload = function(options)
 	{
-		settings = $.extend(settings, options);
-		$(document).ready(function ()
+		this.each(function ()
 		{
-			$(this).on('change', function(e)
-			{
-				methods.queue.call(this, e.target.files);
-			});
+			return new plugin(this, options);
 		});
 	};
 }) (jQuery);
