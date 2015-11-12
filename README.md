@@ -1,6 +1,6 @@
 #jQuery Easy Upload File Plugin
 
-Version: **1.3.0**
+Version: **2.0.0**
 
 ##What does the plugin
 * The plugin allows you to send multiple files to the server with Ajax method without form and page reload;
@@ -29,3 +29,4 @@ $([selector]).easyupload ({arguments});
 **selector** - an object that is a form element `<input type="file">`
 
 COMING SOON...
+OR SEE EXAMPLES...
