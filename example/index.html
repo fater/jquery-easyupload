@@ -43,8 +43,15 @@ $(document).ready(function ()
 			$ ('#progress_1').fadeOut (500);
 			$ ('#status_1_text_total').append ('<li class="text-primary">All files successfully uploaded to the server.</li>');
 		},
-		data: {
-			id: 6, extra_param: 'all'
+		max_file_size: 0.5 * 1024 * 1024,
+		on_max_file_size: function(data)
+		{
+			$ ('#status_1_text_total').append ('<li class="text-danger">File error: File <b>' + data.name + '</b> is too large, it is more than 0.5MB</li>');
+		},
+		data:
+		{
+			id: 6,
+			extra_param: 'all'
 		}
 	});
 

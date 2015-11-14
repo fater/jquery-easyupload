@@ -1,9 +1,9 @@
 /*
  * Module: jQuery Easy Upload Plugin
- * Version: 2.0.0
+ * Version: 2.1.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
- * Updated: 12 Nov 2015
+ * Updated: 14 Nov 2015
  * Site: http://www.fater.ru
  * Dependence: jQuery
  * */
@@ -15,8 +15,9 @@
 	{
 		url: document.URL,
 		data: {},
-		//max_file_size: 0,
+		max_file_size: 0,
 		file_name: 'file',
+		on_max_file_size: function(data){},
 		on_progress: function(data){},
 		on_upload_before: function(data){},
 		on_upload_file: function(data){},
@@ -43,6 +44,11 @@
 		var object = this;
 		$.each(files, function(k, v)
 		{
+			if(object.options.max_file_size > 0 && v.size > object.options.max_file_size)
+			{
+				object.options.on_max_file_size(v);
+				return true;
+			}
 			object.process.size++;
 			object.process.files[object.process.size] = v;
 			object.process.all_files_size += v.size;
@@ -105,6 +111,7 @@
 					var data = {};
 					data.progress_file = evt.loaded / evt.total * 100;
 					data.progress_total = (object.process.uploaded_size + evt.loaded) / object.process.all_files_size * 100;
+					data.progress_total = data.progress_total > 100 ? 100 : data.progress_total;
 					data.total_files = object.process.size;
 					data.current_file = object.process.send_pos;
 					object.options.on_progress(data);
