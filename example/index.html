@@ -43,10 +43,16 @@ $(document).ready(function ()
 			$ ('#progress_1').fadeOut (500);
 			$ ('#status_1_text_total').append ('<li class="text-primary">All files successfully uploaded to the server.</li>');
 		},
-		max_file_size: 0.5 * 1024 * 1024,
+		max_file_size: 2.5 * 1024 * 1024,
 		on_max_file_size: function(data)
 		{
-			$ ('#status_1_text_total').append ('<li class="text-danger">File error: File <b>' + data.name + '</b> is too large, it is more than 0.5MB</li>');
+			$ ('#status_1_text_total').append ('<li class="text-danger">File error: File <b>' + data.name + '</b> is too large, it is more than 2.5MB</li>');
+		},
+		cancel_element: '#cancel_upload',
+		on_upload_cancel: function (data)
+		{
+			$ ('#progress_1').fadeOut (500);
+			$ ('#status_1_text_total').append ('<li class="text-primary">Upload file <b>' + data.file_name + '</b> canceled.</li>');
 		},
 		data:
 		{

@@ -17,15 +17,16 @@
 		data: {},
 		max_file_size: 0,
 		file_name: 'file',
-		cancel_element: '#cancel_upload',
+		cancel_element: '',
+		drop_element: '',
 		on_max_file_size: function(data){},
 		on_progress: function(data){},
 		on_upload_before: function(data){},
 		on_upload_file: function(data){},
 		on_upload_finish: function(){},
-		on_upload_error: function(data){}
+		on_upload_error: function(data){},
+		on_upload_cancel: function(data){}
 	};
-
 	var process_defaults = {files: {}, all_files_size: 0, uploaded_size: 0, size: 0, send_pos: 0, sender_launched: false};
 
 	var plugin = function (element, options)
@@ -36,13 +37,22 @@
 		object.process = $.extend({}, process_defaults);
 		object.element.on('change', function(e)
 		{
+			if(object.process.cancelled)
+			{
+				object.process = $.extend({}, process_defaults);
+			}
 			object.queue(e.target.files);
 		});
-		$(object.options.cancel_element).on('click', function ()
+		if(object.options.cancel_element && object.options.cancel_element != '')
 		{
-			object.cancelled = true;
-			console.log('Clicked cancel');
-		});
+			$(object.options.cancel_element).on('click', function (e)
+			{
+				e.stopPropagation();
+				e.preventDefault();
+				object.process.cancelled = true;
+				return true;
+			});
+		}
 	};
 
 	plugin.prototype.queue = function(files)
@@ -71,7 +81,11 @@
 	plugin.prototype.send = function ()
 	{
 		var object = this;
-		if (object.process.send_pos >= object.process.size)
+		if (object.process.cancelled)
+		{
+			return null;
+		}
+		else if (object.process.send_pos >= object.process.size)
 		{
 			object.process = $.extend({}, process_defaults);
 			object.options.on_upload_finish();
@@ -97,8 +111,11 @@
 			contentType: false,
 			complete: function(data)
 			{
-				object.process.uploaded_size += object.process.files[object.process.send_pos].size;
-				object.send();
+				if(!object.process.cancelled)
+				{
+					object.process.uploaded_size += object.process.files[object.process.send_pos].size;
+					object.send();
+				}
 			},
 			success: function(data)
 			{
@@ -106,7 +123,7 @@
 			},
 			error: function(data)
 			{
-				if (!object.cancelled)
+				if (!object.process.cancelled)
 				{
 					var file_name = object.process.files[object.process.send_pos].name;
 					object.options.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
@@ -117,6 +134,11 @@
 				var xhr = $.ajaxSettings.xhr();
 				xhr.upload.onprogress = function(evt)
 				{
+					if(object.process.cancelled)
+					{
+						object.options.on_upload_cancel({file_name: object.process.files[object.process.send_pos]});
+						xhr.abort();
+					}
 					var data = {};
 					data.progress_file = evt.loaded / evt.total * 100;
 					data.progress_total = (object.process.uploaded_size + evt.loaded) / object.process.all_files_size * 100;
@@ -124,12 +146,6 @@
 					data.total_files = object.process.size;
 					data.current_file = object.process.send_pos;
 					object.options.on_progress(data);
-					if(object.cancelled)
-					{
-						object.process.send_pos = object.process.size;
-						xhr.abort();
-						console.log('Cancelled');
-					}
 				};
 				xhr.upload.onload = function(){};
 				return xhr;
