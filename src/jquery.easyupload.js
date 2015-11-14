@@ -1,6 +1,6 @@
 /*
  * Module: jQuery Easy Upload Plugin
- * Version: 2.1.0
+ * Version: 2.2.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
  * Updated: 14 Nov 2015
@@ -17,6 +17,7 @@
 		data: {},
 		max_file_size: 0,
 		file_name: 'file',
+		cancel_element: '#cancel_upload',
 		on_max_file_size: function(data){},
 		on_progress: function(data){},
 		on_upload_before: function(data){},
@@ -36,6 +37,11 @@
 		object.element.on('change', function(e)
 		{
 			object.queue(e.target.files);
+		});
+		$(object.options.cancel_element).on('click', function ()
+		{
+			object.cancelled = true;
+			console.log('Clicked cancel');
 		});
 	};
 
@@ -100,8 +106,11 @@
 			},
 			error: function(data)
 			{
-				var file_name = object.process.files[object.process.send_pos].name;
-				object.options.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
+				if (!object.cancelled)
+				{
+					var file_name = object.process.files[object.process.send_pos].name;
+					object.options.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
+				}
 			},
 			xhr: function()
 			{
@@ -115,6 +124,12 @@
 					data.total_files = object.process.size;
 					data.current_file = object.process.send_pos;
 					object.options.on_progress(data);
+					if(object.cancelled)
+					{
+						object.process.send_pos = object.process.size;
+						xhr.abort();
+						console.log('Cancelled');
+					}
 				};
 				xhr.upload.onload = function(){};
 				return xhr;
