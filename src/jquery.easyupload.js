@@ -136,7 +136,7 @@
 				{
 					if(object.process.cancelled)
 					{
-						object.options.on_upload_cancel({file_name: object.process.files[object.process.send_pos]});
+						object.options.on_upload_cancel({file_name: object.process.files[object.process.send_pos].name});
 						xhr.abort();
 					}
 					var data = {};
