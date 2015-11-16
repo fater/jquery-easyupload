@@ -1,9 +1,9 @@
 /*
  * Module: jQuery Easy Upload Plugin
- * Version: 2.2.0
+ * Version: 2.3.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
- * Updated: 14 Nov 2015
+ * Updated: 17 Nov 2015
  * Site: http://www.fater.ru
  * Dependence: jQuery
  * */
@@ -43,9 +43,23 @@
 			}
 			object.queue(e.target.files);
 		});
+		if(object.options.drop_element != '')
+		{
+			$(object.options.drop_element)
+				.on('dragover', function(e)
+				{
+					e.stopPropagation();
+					e.preventDefault();
+				})
+				.on('drop', function(e)
+				{
+					e.preventDefault();
+					object.queue(e.originalEvent.dataTransfer.files);
+				});
+		}
 		if(object.options.cancel_element && object.options.cancel_element != '')
 		{
-			$(object.options.cancel_element).on('click', function (e)
+			$(object.options.cancel_element).on('click', function(e)
 			{
 				e.stopPropagation();
 				e.preventDefault();
@@ -72,7 +86,10 @@
 
 		if (object.process.sender_launched == false)
 		{
-			object.options.on_upload_before({files: object.process.size, files_size: object.process.all_files_size});
+			object.options.on_upload_before({
+				files_count: object.process.size,
+				files_size: object.process.all_files_size
+			});
 			object.process.sender_launched = true;
 			object.send();
 		}

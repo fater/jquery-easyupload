@@ -1,10 +1,11 @@
 #jQuery Easy Upload File Plugin
 
-Version: **2.1.0**
+Version: **2.3.0**
 
 ##What does the plugin
-* The plugin allows you to send multiple files to the server with Ajax method without form and page reload;
-* The plugin allows you to configure callbacks and events.
+- The plugin allows you to send multiple files to the server with Ajax method without form and page reload;
+- The plugin allows to use drop area to send files;
+- The plugin allows you to configure callbacks and events.
 
 ##Dependences
 * **jQuery** - only jQuery library required for this plugin
@@ -30,3 +31,9 @@ $([selector]).easyupload ({arguments});
 
 COMING SOON...
 OR SEE EXAMPLES...
+
+
+###Changelist
+
+####v 2.3.0
+- Added a new property `drop_element` as element ID. It's makes dropable area for file uploading.

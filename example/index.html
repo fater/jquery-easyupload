@@ -63,6 +63,7 @@ $(document).ready(function ()
 
 	$ ('#field2').easyupload ({
 		url: 'upload.php?id=5',
+		drop_element: '#drop_files_here',
 		on_upload_before: function (info)
 		{
 			$ ('#progress_2').fadeIn (150);
@@ -84,6 +85,10 @@ $(document).ready(function ()
 
 	$('#field3').easyupload({
 		url: 'upload.php',
+		on_upload_before: function()
+		{
+			$('#status_3_text_total').html('Files uploading...');
+		},
 		on_upload_finish: function()
 		{
 			$('#status_3_text_total').html('The files were downloaded');
@@ -118,6 +123,7 @@ $(document).ready(function ()
 		</div>
 	</div>
 </div>
+
 <hr>
 
 <div class="container">
@@ -134,12 +140,14 @@ $(document).ready(function ()
 			</div>
 		</div>
 		<div class="col-sm-5">
-			<ul id="status_2_text_total"></ul>
+			<div id="drop_files_here" style="background-color: #BBB; border: 4px dashed #666; padding: 100px; font-size: 20px;">
+				or Drop files here..
+			</div>
 		</div>
 	</div>
 </div>
-<hr>
 
+<hr>
 
 <div class="container">
 	<div class="row">
@@ -152,13 +160,8 @@ $(document).ready(function ()
 		</div>
 	</div>
 </div>
+
 <hr>
-
-<br>
-<br>
-
-
-
 
 </body>
 </html>
