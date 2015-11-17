@@ -91,7 +91,20 @@ $(document).ready(function ()
 		},
 		on_upload_finish: function()
 		{
-			$('#status_3_text_total').html('The files were downloaded');
+			$('#status_3_text_total').html('The files were uploaded');
+		}
+	});
+
+	$('#field4').easyupload({
+		url: 'upload.php',
+		submit_element: '#send_button_4',
+		on_upload_before: function()
+		{
+			$('#status_4_text_total').html('Files uploading...');
+		},
+		on_upload_finish: function()
+		{
+			$('#status_4_text_total').html('The files were uploaded');
 		}
 	});
 });
@@ -157,6 +170,21 @@ $(document).ready(function ()
 		<div class="col-sm-5"></div>
 		<div class="col-sm-5">
 			<ul id="status_3_text_total"></ul>
+		</div>
+	</div>
+</div>
+
+<hr>
+
+<div class="container">
+	<div class="row">
+		<div class="col-sm-4">
+			<span class="btn btn-primary btn-file">Select files<input type="file" id="field4" multiple /></span>
+			<span class="btn btn-primary" id="send_button_4">Upload selected</span>
+		</div>
+		<div class="col-sm-3"></div>
+		<div class="col-sm-5">
+			<ul id="status_4_text_total"></ul>
 		</div>
 	</div>
 </div>

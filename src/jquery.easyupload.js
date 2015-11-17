@@ -1,9 +1,9 @@
 /*
  * Module: jQuery Easy Upload Plugin
- * Version: 2.3.0
+ * Version: 2.4.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
- * Updated: 17 Nov 2015
+ * Updated: 18 Nov 2015
  * Site: http://www.fater.ru
  * Dependence: jQuery
  * */
@@ -19,6 +19,7 @@
 		file_name: 'file',
 		cancel_element: '',
 		drop_element: '',
+		submit_element: '',
 		on_max_file_size: function(data){},
 		on_progress: function(data){},
 		on_upload_before: function(data){},
@@ -35,14 +36,28 @@
 		object.element = $(element);
 		object.options = $.extend({}, defaults, options);
 		object.process = $.extend({}, process_defaults);
-		object.element.on('change', function(e)
+		if(object.options.submit_element != '')
 		{
-			if(object.process.cancelled)
+			$(object.options.submit_element).on('click', function()
 			{
-				object.process = $.extend({}, process_defaults);
-			}
-			object.queue(e.target.files);
-		});
+				if(object.process.cancelled)
+				{
+					object.process = $.extend({}, process_defaults);
+				}
+				object.queue(object.element.get(0).files);
+			});
+		}
+		else
+		{
+			object.element.on('change', function(e)
+			{
+				if(object.process.cancelled)
+				{
+					object.process = $.extend({}, process_defaults);
+				}
+				object.queue(e.target.files);
+			});
+		}
 		if(object.options.drop_element != '')
 		{
 			$(object.options.drop_element)
@@ -57,7 +72,7 @@
 					object.queue(e.originalEvent.dataTransfer.files);
 				});
 		}
-		if(object.options.cancel_element && object.options.cancel_element != '')
+		if(object.options.cancel_element != '')
 		{
 			$(object.options.cancel_element).on('click', function(e)
 			{
