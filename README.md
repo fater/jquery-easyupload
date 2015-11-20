@@ -29,6 +29,14 @@ $([selector]).easyupload ({arguments});
 ```
 **selector** - an object that is a form element `<input type="file">`
 
+**arguments** - is a JSON object which can contain the following parameters:
+  
+Parameter|Description|Type|Default
+---|---|---|---
+**url** | php file location | *Text* | document.URL or .
+**data** | Data sent to the server as an object | Object | {}
+
+  
 COMING SOON...
 OR SEE EXAMPLES...
 
