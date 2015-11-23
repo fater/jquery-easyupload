@@ -39,6 +39,7 @@ Parameter|Description|Type|Default
 **file_name** | The name of $_FILES value  | Text | $_FILES['file']
 **cancel_element** | $(Selector) of cancel element | Text | ''
 **drop_element** | $(Selector) of drop area element | Text | ''
+**submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | ''
 
 > The arguments are not required
 
