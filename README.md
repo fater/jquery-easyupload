@@ -37,6 +37,7 @@ Parameter|Description|Type|Default
 **data** | Data sent to the server as an object | Object | {}
 **max_file_size** | Maximum file size. If size equal 0 then unlimited size | Integer | 0
 **file_name** | The name of $_FILES value  | Text | $_FILES['file']
+**cancel_element** | $(Selector) element name | Text | ''
 
 > The arguments are not required
 
