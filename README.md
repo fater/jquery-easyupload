@@ -27,7 +27,7 @@ Attach file to HTML page
 ```js
 $([selector]).easyupload ({arguments});
 ```
-**selector** - an object that is a form element `<input type="file">`
+**selector** - selector of form element `<input type="file">`
 
 **arguments** - is a JSON object which can contain the following parameters:
   
