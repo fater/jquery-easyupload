@@ -29,7 +29,9 @@ $([selector]).easyupload ({arguments});
 ```
 **selector** - selector of form element `<input type="file">`
 
-**arguments** - is a JSON object which can contain the following parameters:
+**arguments** - a JSON object contains the following parameters:
+
+> The arguments are not required
   
 Parameter|Description|Type|Default
 ---|---|---|---
@@ -41,7 +43,6 @@ Parameter|Description|Type|Default
 **drop_element** | $(Selector) of drop area element | Text | '' (Not set)
 **submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | '' (Not set)
 
-> The arguments are not required
 
 ###Changelist
 
