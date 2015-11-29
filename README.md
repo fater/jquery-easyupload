@@ -42,6 +42,7 @@ Parameter|Description|Type|Default
 **cancel_element** | $(Selector) of cancel element | Text | '' (Not set)
 **drop_element** | $(Selector) of drop area element | Text | '' (Not set)
 **submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | '' (Not set)
+**on_max_file_size** | Callback method: Run if the file size more than **max_file_size** value | Function | |
 
 
 ###Changelist
