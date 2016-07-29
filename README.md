@@ -1,3 +1,5 @@
+(https://img.shields.io/badge/Version-2.4-brightgreen.svg)
+
 #jQuery Easy Upload File Plugin
 
 Version: **2.4.0**
