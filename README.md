@@ -1,4 +1,5 @@
 ![](https://img.shields.io/badge/Version-2.4-brightgreen.svg)
+![](https://img.shields.io/badge/Technologies-jQuery-blue.svg)
 
 #jQuery Easy Upload File Plugin
 
