@@ -1,26 +1,26 @@
 {
-	"name": "jquery-easyupload",
-	"homepage": "https://github.com/fater/jquery-easyupload",
-	"authors": [
-		"'Chaikin Evgenii <'fat_hack@rambler.ru'>"
-	],
-	"description": "jQuery Easy Upload Plugin",
-	"main": "jquery.easyupload.js",
-	"moduleType": [],
-	"keywords": [
-		"easyupload",
-		"jquery-upload",
-		"uploadfile"
-	],
-	"license": "CC",
-	"ignore": [
-		"**/.*",
-		"node_modules",
-		"bower_components",
-		"test",
-		"tests"
-	],
-	"dependencies": {
-		"jquery": "~2.1.4"
-	}
+  "name": "jquery-easyupload",
+  "homepage": "https://github.com/fater/jquery-easyupload",
+  "authors": [
+    "'Chaikin Evgenii <'fat_hack@rambler.ru'>"
+  ],
+  "description": "jQuery Easy Upload Plugin",
+  "main": "jquery.easyupload.js",
+  "moduleType": [],
+  "keywords": [
+    "easyupload",
+    "jquery-upload",
+    "uploadfile"
+  ],
+  "license": "CC",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4"
+  }
 }
