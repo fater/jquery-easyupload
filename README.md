@@ -3,7 +3,7 @@
 
 #jQuery Easy Upload File Plugin
 
-Version: **2.4.0**
+Version: **2.4.1**
 
 ##What does the plugin
 - The plugin allows you to send multiple files to the server with Ajax method without form and page reload;
@@ -49,6 +49,9 @@ Parameter|Description|Type|Default
 
 
 ###Changelist
+
+####v 2.4.1
+- Soft code refactoring (Logic is not changed).
 
 ####v 2.4.0
 - Added a new property `submit_element` as element ID. This is a button whitch sends the selected files by clicking on it.
