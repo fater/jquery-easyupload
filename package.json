@@ -1,7 +1,7 @@
 {
   "name": "jquery-easyupload",
   "version": "2.4.1",
-  "description": "jQuery Easy Upload Plugin",
+  "description": "jQuery Easy File Upload Plugin",
   "main": "jquery.easyupload.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"

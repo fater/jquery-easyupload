@@ -1,5 +1,5 @@
 /*
- * Module: jQuery Easy Upload Plugin
+ * Module: jQuery Easy File Upload Plugin
  * Version: 2.4.1
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
