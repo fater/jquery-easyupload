@@ -15,7 +15,7 @@ Version: **2.4.1**
 
 * **jQuery** - jQuery are required.
 
-## Bower Installation
+## Install via Bower
 
 `bower install jquery-easyupload --save` 
 
@@ -23,31 +23,31 @@ Version: **2.4.1**
 
 Copy this code to the head section of you site
 ```html
-<script src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"></script>
 
-// Easy File Upload Plugin
-<script src="url-to-module/jquery-easyupload/dist/jquery.easyupload.min.js"></script>
+// Easy File Upload plugin
+<script type="text/javascript" src="url-to-module/jquery-easyupload/dist/jquery.easyupload.min.js"></script>
 
 // Button styles
-<script src="url-to-module/jquery-easyupload/dist/jquery.easyupload.min.css"></script>
+<script type="text/javascript" src="url-to-module/jquery-easyupload/dist/jquery.easyupload.min.css"></script>
 ```
 
 ## Options and initialization
 ```js
-$([selector]).easyupload({arguments});
+$('#selector').easyupload({/* arguments */});
 ```
-**selector** - Selector for the element `<input type="file">`
+**selector** - Selector for the element `<input type="file" id="selector" />`
 
-**arguments** - JSON object contains the following parameters:
+**arguments** - JSON object which contains the following parameters:
 
 > The arguments are not required
   
 Parameter | Description | Type | Default
 --- | --- | --- | ---
-**url** | API or php file location | *Text* | `document.URL`
+**url** | API or php file location | string | `document.URL`
 **data** | Data sent to the server as an object | Object | `{}`
-**max_file_size** | Maximum file size. 0 - unlimited size | Integer | `0`
-**file_name** | The name of variable (in PHP you will get in `$_FILES['file']` | Text | `$_FILES['file']`
+**max_file_size** | Maximum file size in bytes.<br />**0** - unlimited size | Integer | `0`
+**file_name** | The name of variable (in PHP you will get in `$_FILES['file']` | string | `'file'`
 **cancel_element** | $(Selector) of cancel element | Text | `''` (Not set)
 **drop_element** | $(Selector) of drop area element | Text | `''` (Not set)
 **submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | `''` (Not set)
