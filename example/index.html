@@ -13,14 +13,84 @@
 
     <!-- Prism -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/prism.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism.min.css" />
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/themes/prism-coy.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.6.0/plugins/line-numbers/prism-line-numbers.min.css"/>
 </head>
 <body>
 
-<br/>
-<br/>
+<br/> <br/>
 
 <div class="container">
+    <div class="row">
+        <div class="col-sm-1"></div>
+        <div class="col-sm-10">
+
+            <h2>Installation</h2>
+
+            <h4>Include the following files to your project. Preferably paste code in the head section.</h4>
+
+            <h4>HTML code:</h4>
+            <pre><code class="language-html line-numbers">&lt;link rel="stylesheet" href="../src/jquery.easyupload.css"&gt;
+&lt;script type="text/javascript" src="../src/jquery.easyupload.js"&gt;&lt;/script&gt;</code></pre>
+
+            <br/>
+            <h2>Example 1: Simple upload</h2>
+
+            <!-- Example -->
+            <div class="panel panel-default">
+                <div class="panel-body text-center">
+                    <span class="btn btn-default btn-file">
+                        Upload files <input type="file" id="upload_button_1" multiple class=""/>
+                    </span>
+                </div>
+            </div>
+
+            <h4>Description</h4>
+
+            <p>The plugin sets easyupload function for
+                <code>#upload_button_1</code> and activate uploader. When you select files plugin upload it automatically.
+            </p>
+
+            <ol>
+                <li>Just add code below to your project</li>
+                <li>Create the button with attribute <code>id="upload_button_1"</code></li>
+                <li>Set default parameters, such as <code>url</code></li>
+            </ol>
+
+            <!-- Code description block -->
+            <div class="row">
+                <div class="col-sm-6">
+                    <h4>JavaScript code:</h4>
+
+                    <pre><code class="language-js line-numbers">$(document).ready(function () {
+    $('#upload_button_1').easyupload({
+        url: 'upload.php',
+        on_upload_finish: function () {
+            alert('Uploaded!');
+        }
+    });
+};</code></pre>
+                </div>
+                <div class="col-sm-6">
+                    <h4>HTML code:</h4>
+                    <pre><code class="language-html line-numbers">&lt;input type="file" id="upload_button_1" multiple /&gt;</code></pre>
+                    <p>If you want to upload multiple images use attribute <code>multiply</code> in the input tag.</p>
+                </div>
+            </div>
+
+
+            <br/>
+
+
+        </div>
+        <div class="col-sm-1"></div>
+    </div>
+
+
+    <h2>Example 2: Status messages and events</h2>
+
+    <!-- Example -->
     <div class="row">
         <div class="col-sm-2">
             <input type="file" id="field1" multiple/>
@@ -29,7 +99,7 @@
             <div id="progress_1" style="display: none;">
                 <div style="width: 400px; background-color: #EEEEEE;">
                     <div id="status_1_total"
-                         style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
+                            style="background-color: #333333; width: 0%; height: 40px; right: 0;"></div>
                 </div>
                 <br>
                 <div style="width: 400px; background-color: #EEEEEE;">
@@ -43,11 +113,65 @@
             <ul id="status_1_text_total"></ul>
         </div>
     </div>
-</div>
 
-<hr>
+    <br/>
 
-<div class="container">
+    <!-- Code description block -->
+    <div class="row">
+        <div class="col-sm-12">
+
+            <h4>JavaScript Code:</h4>
+            <pre><code class="language-js line-numbers">$(document).ready(function () {
+    $('#field1').easyupload({
+        url: 'upload.php',
+        on_upload_before: function (info) {
+            $('#status_1_text').html('');
+            $('#progress_1').fadeIn(150);
+            $('#status_1,#status_1_total').css({width: 0});
+        },
+        on_progress: function (progress) {
+            $('#status_1').css({width: progress.progress_file + '%'});
+            $('#status_1_total').css({width: progress.progress_total + '%'});
+            $('#status_1_text').html('Sending files <b>' + progress.current_file +
+                            '</b> / <b>' + progress.total_files + '</b> ');
+        },
+        on_upload_file: function (data) {
+            $('#status_1').css({width: 0});
+            $('#status_1_text_total').append('<li>File <b>' + data.data.name +
+                            '</b> successfully uploaded to the server.</li>')
+        },
+        on_upload_error: function (p) {
+            $('#status_1_text_total').append('<li class="text-danger">File error: <b>' +
+                            p.file_name + '</b>. The server reported an error. ' +
+                            'The uploaded file size exceeds the setting on the server.</li>');
+        },
+        on_upload_finish: function () {
+            $('#progress_1').fadeOut(500);
+            $('#status_1_text_total').append('<li class="text-primary">All files ' +
+                            'successfully uploaded to the server.</li>');
+        },
+        max_file_size: 2.5 * 1024 * 1024,
+        on_max_file_size: function (data) {
+            $('#status_1_text_total').append('<li class="text-danger">File error: File <b>' +
+                            data.name + '</b> is too large, it is more than 2.5MB</li>');
+        },
+        cancel_element: '#cancel_upload',
+        on_upload_cancel: function (data) {
+            $('#progress_1').fadeOut(500);
+            $('#status_1_text_total').append('<li class="text-primary">Upload file <b>' +
+                            data.file_name + '</b> canceled.</li>');
+        },
+        // Extra data
+        data: {
+            id: 6,
+            extra_param: 'all'
+        }
+    });
+};</code></pre>
+        </div>
+    </div>
+
+
     <div class="row">
         <div class="col-sm-2">
             <span class="btn btn-primary btn-file">Upload files<input type="file" id="field2" multiple/></span>
@@ -62,16 +186,12 @@
         </div>
         <div class="col-sm-5">
             <div id="drop_files_here"
-                 style="background-color: #BBB; border: 4px dashed #666; padding: 100px; font-size: 20px;">
+                    style="background-color: #BBB; border: 4px dashed #666; padding: 100px; font-size: 20px;">
                 or Drop files here..
             </div>
         </div>
     </div>
-</div>
 
-<hr>
-
-<div class="container">
     <div class="row">
         <div class="col-sm-2">
             <input type="file" id="field3" multiple/>
@@ -81,11 +201,7 @@
             <ul id="status_3_text_total"></ul>
         </div>
     </div>
-</div>
 
-<hr>
-
-<div class="container">
     <div class="row">
         <div class="col-sm-4">
             <span class="btn btn-primary btn-file">Select files<input type="file" id="field4" multiple/></span>
@@ -97,8 +213,6 @@
         </div>
     </div>
 </div>
-
-<hr>
 
 </body>
 </html>

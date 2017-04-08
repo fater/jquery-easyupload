@@ -1,4 +1,12 @@
 $(document).ready(function () {
+    // Example 1
+    $('#upload_button_1').easyupload({
+        url: 'upload.php',
+        on_upload_finish: function () {
+            alert('Uploaded!');
+        }
+    });
+
     $('#field1').easyupload({
         url: 'upload.php',
         on_upload_before: function (info) {
