@@ -40,8 +40,6 @@ $('#selector').easyupload({/* arguments */});
 
 **arguments** - JSON object which contains the following parameters:
 
-> The arguments are not required
-  
 Parameter | Description | Type | Default
 --- | --- | --- | ---
 **url** | Path to the server address | string | `document.URL`
@@ -51,7 +49,9 @@ Parameter | Description | Type | Default
 **cancel_element** | $(Selector) of cancel element | Text | `''` (Not set)
 **drop_element** | $(Selector) of drop area element | Text | `''` (Not set)
 **submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | `''` (Not set)
-**on_max_file_size** | Callback method: Run callback if file size more than **max_file_size** value | Function | |
+**on_max_file_size** | *Callback method:* Run callback if file size more than **max_file_size** value. The closure will receive fileInfo argument with file information | Function | `function(fileInfo){}`
+**on_progress** | *Callback method:* Running closure function while downloading the file. The closure will receive *progress* argument with the following parameters `{progress_file /* Progress of the upload in percentage for the current file */, progress_total /* Progress of the upload in percentage for all files */, total_files /* Number of files */, current_file /* Number of current uploading file */}` | Function | function(progress){}
+
 
 
 ### Changelist
