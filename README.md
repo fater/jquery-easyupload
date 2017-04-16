@@ -1,9 +1,9 @@
-![](https://img.shields.io/badge/Version-2.4-brightgreen.svg)
+![](https://img.shields.io/badge/Version-2.5-brightgreen.svg)
 ![](https://img.shields.io/badge/Technologies-jQuery-blue.svg)
 
 # jQuery Easy File Upload Plugin
 
-Version: **2.4.1**
+Version: **2.5.0**
 
 ## What does the plugin?
 
@@ -11,7 +11,7 @@ Version: **2.4.1**
 - The plugin allows to use Drag & Drop area to upload files;
 - The plugin allows you to configure callbacks and events.
 
-## Dependences
+## Dependencies
 
 * **jQuery** - jQuery are required.
 
@@ -44,10 +44,10 @@ $('#selector').easyupload({/* arguments */});
   
 Parameter | Description | Type | Default
 --- | --- | --- | ---
-**url** | API or php file location | string | `document.URL`
-**data** | Data sent to the server as an object | Object | `{}`
+**url** | Path to the server address | string | `document.URL`
+**data** | Extra data will send to the server | Object | `{}`
 **max_file_size** | Maximum file size in bytes.<br />**0** - unlimited size | Integer | `0`
-**file_name** | The name of variable (in PHP you will get in `$_FILES['file']` | string | `'file'`
+**file_name** | The name of the variable passed in the array (in PHP you will get in `$_FILES['file']`) | string | `'file'`
 **cancel_element** | $(Selector) of cancel element | Text | `''` (Not set)
 **drop_element** | $(Selector) of drop area element | Text | `''` (Not set)
 **submit_element** | $(Selector) of submit element. This may be a button. If this param is set on select (on change) **selector** can not be able to send automatically. | Text | `''` (Not set)
@@ -55,6 +55,9 @@ Parameter | Description | Type | Default
 
 
 ### Changelist
+
+#### v 2.5.0
+- Code refactoring. Update Readme file
 
 #### v 2.4.1
 - Soft code refactoring (Logic is not changed).

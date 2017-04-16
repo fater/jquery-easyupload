@@ -1,6 +1,6 @@
 {
   "name": "jquery-easyupload",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "jQuery Easy File Upload Plugin",
   "main": "jquery.easyupload.js",
   "scripts": {

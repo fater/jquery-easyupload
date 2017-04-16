@@ -1,24 +1,37 @@
 /*
  * Module: jQuery Easy File Upload Plugin
- * Version: 2.4.1
+ * Version: 2.5.0
  * Author: Chaikin Evgenii
  * Release date: 10 Nov 2015
- * Updated: 1 Nov 2016
+ * Updated: 09 Apr 2017
  * Site: http://www.fater.ru
  * Dependence: jQuery
  * */
 
-
 (function ($) {
-    var defaults =
+    /**
+     * Default parameters
+     *
+     * @type {{url: string, data: {}, max_file_size: number, file_name: string, cancel_element: string, drop_element: string, submit_element: string, on_max_file_size: defaults.on_max_file_size, on_progress: defaults.on_progress, on_upload_before: defaults.on_upload_before, on_upload_file: defaults.on_upload_file, on_upload_finish: defaults.on_upload_finish, on_upload_error: defaults.on_upload_error, on_upload_cancel: defaults.on_upload_cancel}}
+     */
+    let defaults =
     {
+        // Path to the server address
         url: document.URL,
+        // Extra data will send to the server
         data: {},
+        // Maximum file size in bytes. 0 - unlimited size
         max_file_size: 0,
+        // The name of the variable passed in the array (in PHP you will get in $_FILES['file'])
         file_name: 'file',
         cancel_element: '',
         drop_element: '',
         submit_element: '',
+        /**
+         * The method is started if the file is larger than the specified size
+         *
+         * @param data
+         */
         on_max_file_size: function (data) {
         },
         on_progress: function (data) {
@@ -34,7 +47,7 @@
         on_upload_cancel: function (data) {
         }
     };
-    var process_defaults = {
+    let process_defaults = {
         files: {},
         all_files_size: 0,
         uploaded_size: 0,
@@ -43,8 +56,8 @@
         sender_launched: false
     };
 
-    var plugin = function (element, options) {
-        var object = this;
+    let plugin = function (element, options) {
+        let object = this;
         object.element = $(element);
         object.options = $.extend({}, defaults, options);
         object.process = $.extend({}, process_defaults);
@@ -55,8 +68,7 @@
                 }
                 object.queue(object.element.get(0).files);
             });
-        }
-        else {
+        } else {
             object.element.on('change', function (e) {
                 if (object.process.cancelled) {
                     object.process = $.extend({}, process_defaults);
@@ -86,7 +98,7 @@
     };
 
     plugin.prototype.queue = function (files) {
-        var object = this;
+        let object = this;
         $.each(files, function (k, v) {
             if (object.options.max_file_size > 0 && v.size > object.options.max_file_size) {
                 object.options.on_max_file_size(v);
@@ -108,17 +120,16 @@
     };
 
     plugin.prototype.send = function () {
-        var object = this;
+        let object = this;
         if (object.process.cancelled) {
             return null;
-        }
-        else if (object.process.send_pos >= object.process.size) {
+        } else if (object.process.send_pos >= object.process.size) {
             object.process = $.extend({}, process_defaults);
             object.options.on_upload_finish();
             return null;
         }
         object.process.send_pos++;
-        var form_data = new FormData();
+        let form_data = new FormData();
         // Append one file to submit
         form_data.append(object.options.file_name, object.process.files[object.process.send_pos]);
         // Append extra data to submit
@@ -134,7 +145,7 @@
             dataType: 'json',
             processData: false,
             contentType: false,
-            complete: function (data) {
+            complete: function () {
                 if (!object.process.cancelled) {
                     object.process.uploaded_size += object.process.files[object.process.send_pos].size;
                     object.send();
@@ -145,18 +156,18 @@
             },
             error: function (data) {
                 if (!object.process.cancelled) {
-                    var file_name = object.process.files[object.process.send_pos].name;
-                    object.options.on_upload_error.call(this, $.extend(data, {file_name: file_name}));
+                    let fileName = object.process.files[object.process.send_pos].name;
+                    object.options.on_upload_error.call(this, $.extend(data, {file_name: fileName}));
                 }
             },
             xhr: function () {
-                var xhr = $.ajaxSettings.xhr();
+                let xhr = $.ajaxSettings.xhr();
                 xhr.upload.onprogress = function (evt) {
                     if (object.process.cancelled) {
                         object.options.on_upload_cancel({file_name: object.process.files[object.process.send_pos].name});
                         xhr.abort();
                     }
-                    var data = {};
+                    let data = {};
                     data.progress_file = evt.loaded / evt.total * 100;
                     data.progress_total = (object.process.uploaded_size + evt.loaded) / object.process.all_files_size * 100;
                     data.progress_total = data.progress_total > 100 ? 100 : data.progress_total;
